@@ -4,702 +4,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎀 JJ's Minecraft Server</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --minecraft-dirt: #5D4037;
-            --minecraft-grass: #7CB342;
-            --minecraft-stone: #757575;
-            --minecraft-sky: #87CEEB;
-            --minecraft-dark: #1a1a2e;
-            --minecraft-gold: #FFD700;
-            --minecraft-diamond: #00BCD4;
-            --minecraft-red: #FF4444;
-            --lucky-red: #FF1744;
-            --flower-pink: #FF80AB;
-        }
-
         body {
-            font-family: 'Noto Sans', sans-serif;
-            background: linear-gradient(180deg, var(--minecraft-sky) 0%, #E0F7FA 50%, var(--minecraft-grass) 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
-            overflow-x: hidden;
-            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text y="20" font-size="20">⛏️</text></svg>'), auto;
-        }
-
-        /* Floating Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            font-size: 24px;
-            animation: float-up 15s infinite linear;
-            opacity: 0.8;
-        }
-
-        @keyframes float-up {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
+            color: #fff;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: center;
             text-align: center;
-            position: relative;
-            padding: 40px 20px;
-            background: linear-gradient(180deg, 
-                var(--minecraft-sky) 0%, 
-                #87CEEB 40%, 
-                var(--minecraft-grass) 100%);
+            padding: 20px;
         }
-
-        /* Grass Block Bottom */
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: linear-gradient(180deg, 
-                transparent 0%, 
-                var(--minecraft-grass) 30%, 
-                var(--minecraft-dirt) 100%);
-        }
-
-        /* Floating Blocks Decoration */
-        .floating-blocks {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .block {
-            position: absolute;
-            font-size: 40px;
-            animation: float-block 8s infinite ease-in-out;
-            opacity: 0.7;
-        }
-
-        @keyframes float-block {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-
-        /* Server IP Display */
-        .server-ip-container {
-            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,30,50,0.9));
-            padding: 40px 60px;
+        .container {
+            max-width: 800px;
+            background: rgba(0,0,0,0.5);
+            padding: 40px;
             border-radius: 20px;
-            border: 4px solid var(--minecraft-gold);
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), inset 0 0 30px rgba(0,0,0,0.3);
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 10;
+            backdrop-filter: blur(10px);
         }
-
-        .server-ip-container::before {
-            content: '🎀';
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 40px;
-            background: linear-gradient(135deg, var(--minecraft-grass), #4CAF50);
-            padding: 10px;
-            border-radius: 50%;
-            border: 3px solid var(--minecraft-gold);
-        }
-
-        .server-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: clamp(1.2rem, 4vw, 2rem);
-            color: var(--minecraft-gold);
-            margin-bottom: 25px;
-            text-shadow: 3px 3px 0 #000;
-            line-height: 1.5;
-        }
-
-        .server-ip {
-            font-family: 'Press Start 2P', cursive;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            color: #fff;
-            background: linear-gradient(135deg, #333, #1a1a1a);
-            padding: 20px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 3px solid var(--minecraft-gold);
-            position: relative;
-        }
-
-        .server-ip:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-        }
-
-        .server-ip::after {
-            content: '📋 Click to copy';
-            display: block;
-            font-family: 'Noto Sans', sans-serif;
-            font-size: 12px;
-            color: #aaa;
-            margin-top: 10px;
-        }
-
-        /* Server Status */
-        .server-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(0,0,0,0.6);
-            padding: 15px 30px;
-            border-radius: 50px;
-            margin-bottom: 40px;
-            border: 2px solid var(--minecraft-grass);
-        }
-
-        .status-dot {
-            width: 15px;
-            height: 15px;
-            background: var(--minecraft-grass);
-            border-radius: 50%;
-            animation: pulse-green 2s infinite;
-        }
-
-        @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(124, 179, 66, 0.7); }
-            50% { box-shadow: 0 0 0 15px rgba(124, 179, 66, 0); }
-        }
-
-        .status-text {
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        /* Edition Cards */
-        .edition-cards {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            max-width: 900px;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .edition-card {
-            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(30,30,50,0.8));
-            padding: 30px;
-            border-radius: 20px;
-            width: 280px;
-            border: 3px solid;
-            transition: all 0.3s;
-        }
-
-        .edition-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .edition-card.java {
-            border-color: #8B4513;
-            background: linear-gradient(135deg, #8B4513, #A0522D);
-        }
-
-        .edition-card.bedrock {
-            border-color: var(--minecraft-diamond);
-            background: linear-gradient(135deg, var(--minecraft-diamond), #0097A7);
-        }
-
-        .edition-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
-        .edition-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 14px;
-            margin-bottom: 15px;
-            color: #fff;
-            text-shadow: 2px 2px 0 #000;
-        }
-
-        .edition-ip {
-            background: rgba(0,0,0,0.3);
-            padding: 12px;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 14px;
-            color: #FFD700;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .edition-ip:hover {
-            background: rgba(255, 215, 0, 0.2);
-        }
-
-        .edition-port {
-            font-size: 12px;
-            color: #ccc;
-        }
-
-        /* Copy Button */
-        .copy-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            font-size: 14px;
-        }
-
-        .copy-btn.java {
-            background: var(--minecraft-gold);
-            color: #333;
-        }
-
-        .copy-btn.bedrock {
-            background: var(--minecraft-diamond);
-            color: #fff;
-        }
-
-        .copy-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-
-        /* Features Section */
-        .features {
-            background: linear-gradient(180deg, var(--minecraft-dirt) 0%, #3E2723 100%);
-            padding: 80px 20px;
-            position: relative;
-        }
-
-        .features::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, var(--minecraft-grass) 50%, transparent 50%);
-        }
-
-        .features-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: var(--minecraft-gold);
-            text-align: center;
-            margin-bottom: 50px;
-            text-shadow: 3px 3px 0 #000;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            padding: 30px 20px;
-            border-radius: 15px;
-            text-align: center;
-            border: 2px solid rgba(255,255,255,0.2);
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--minecraft-gold);
-            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,215,0,0.05));
-        }
-
-        .feature-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .feature-title {
-            font-weight: 900;
-            font-size: 1.1rem;
-            color: var(--minecraft-gold);
-            margin-bottom: 8px;
-        }
-
-        .feature-desc {
-            color: #ccc;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        /* Commands Section */
-        .commands {
-            background: linear-gradient(135deg, var(--minecraft-dark) 0%, #0f0f23 100%);
-            padding: 80px 20px;
-            text-align: center;
-        }
-
-        .commands-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: var(--minecraft-diamond);
-            margin-bottom: 40px;
-            text-shadow: 3px 3px 0 #000;
-        }
-
-        .commands-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .command-item {
-            background: rgba(255,255,255,0.08);
-            padding: 15px 20px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .command-item:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: var(--minecraft-gold);
-            transform: translateX(5px);
-        }
-
-        .command-code {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 11px;
-            background: linear-gradient(135deg, var(--minecraft-grass), #4CAF50);
-            padding: 8px 12px;
-            border-radius: 5px;
-            color: #fff;
-            text-shadow: 1px 1px 0 #000;
-            white-space: nowrap;
-        }
-
-        .command-desc {
-            color: #fff;
-            font-size: 0.95rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: #111;
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 4px solid var(--minecraft-gold);
-        }
-
-        .footer-text {
-            color: #888;
-            font-size: 0.9rem;
+        h1 {
+            font-size: 2.5rem;
             margin-bottom: 20px;
+            color: #FFD700;
         }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+        .server-info {
+            background: rgba(124, 179, 66, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #7CB342;
         }
-
-        .footer-link {
-            color: var(--minecraft-gold);
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .footer-link:hover {
-            color: #fff;
-            text-shadow: 0 0 10px var(--minecraft-gold);
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--minecraft-grass);
-            color: white;
+        .server-ip {
+            font-size: 1.8rem;
+            font-family: monospace;
+            color: #4CAF50;
+            background: rgba(0,0,0,0.3);
             padding: 15px 25px;
             border-radius: 10px;
-            font-weight: 700;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-
-        .notification.error {
-            background: var(--minecraft-red);
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* Cat Animation */
-        .cat-mascot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 60px;
-            animation: cat-bounce 1s infinite;
+            display: inline-block;
+            margin: 10px 0;
             cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s;
         }
-
-        .cat-mascot:hover {
-            transform: scale(1.2) rotate(5deg);
+        .server-ip:hover {
+            background: rgba(76, 175, 80, 0.3);
         }
-
-        @keyframes cat-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        .edition {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
         }
-
-        /* Pixel Art Decorations */
-        .pixel-decoration {
-            position: absolute;
-            font-size: 30px;
-            opacity: 0.6;
+        .edition-card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            width: 250px;
+            border: 2px solid;
+        }
+        .edition-card.java {
+            border-color: #8B4513;
+        }
+        .edition-card.bedrock {
+            border-color: #00BCD4;
+        }
+        .edition-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .edition-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .port {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            margin: 20px 0;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        .status-dot.online {
+            background: #4CAF50;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+        }
+        .note {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #FFC107;
+        }
+        .features {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .features h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .features li::before {
+            content: "🎀 ";
         }
     </style>
 </head>
 <body>
-    <!-- Floating Particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Cat Mascot -->
-    <div class="cat-mascot" onclick="triggerCelebration()">🐱</div>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="floating-blocks">
-            <div class="block" style="top: 10%; left: 5%; animation-delay: 0s;">🍄</div>
-            <div class="block" style="top: 20%; right: 8%; animation-delay: 1s;">🌸</div>
-            <div class="block" style="top: 60%; left: 3%; animation-delay: 2s;">🍀</div>
-            <div class="block" style="top: 70%; right: 5%; animation-delay: 3s;">💎</div>
-            <div class="block" style="top: 40%; left: 10%; animation-delay: 4s;">⭐</div>
-            <div class="block" style="top: 30%; right: 15%; animation-delay: 5s;">🌈</div>
+    <div class="container">
+        <h1>🎀 JJ's Minecraft Server 🎀</h1>
+        
+        <div class="status">
+            <div class="status-dot online"></div>
+            <span id="statusText">🟢 Server Online</span>
         </div>
-
-        <!-- Server IP Display -->
-        <div class="server-ip-container" onclick="copyIP()">
-            <h1 class="server-title">🎀 JJ's Minecraft Server 🎀</h1>
-            <div class="server-ip" id="mainIP">jjmc.bradarr.com</div>
+        
+        <div class="server-info">
+            <p style="margin-bottom: 10px; color: #aaa;">Server Address:</p>
+            <div class="server-ip" onclick="copyIP()" title="Click to copy">jjmc.bradarr.com</div>
         </div>
-
-        <!-- Server Status -->
-        <div class="server-status">
-            <div class="status-dot"></div>
-            <span class="status-text">🟢 Online | 1.21.3 Purpur</span>
-        </div>
-
-        <!-- Edition Cards -->
-        <div class="edition-cards">
+        
+        <div class="edition">
             <div class="edition-card java">
                 <div class="edition-icon">💻</div>
                 <div class="edition-title">Java Edition</div>
-                <div class="edition-ip" onclick="copyToClipboard('jjmc.bradarr.com')">jjmc.bradarr.com</div>
-                <div class="edition-port">Port: 25565 (default)</div>
-                <button class="copy-btn java" onclick="copyToClipboard('jjmc.bradarr.com')">📋 Copy Address</button>
+                <p>Port: 25565 (default)</p>
+                <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">Click IP above to copy</p>
             </div>
-
             <div class="edition-card bedrock">
                 <div class="edition-icon">📱</div>
                 <div class="edition-title">Bedrock Edition</div>
-                <div class="edition-ip" onclick="copyToClipboard('jjmc.bradarr.com:19132')">jjmc.bradarr.com</div>
-                <div class="edition-port">Port: 19132 (UDP)</div>
-                <button class="copy-btn bedrock" onclick="copyToClipboard('jjmc.bradarr.com:19132')">📋 Copy Address</button>
+                <p>Port: 19132 (UDP)</p>
+                <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">Coming soon!</p>
             </div>
         </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features">
-        <h2 class="features-title">✨ Server Features ✨</h2>
-        <div class="features-grid">
-            <div class="feature-card" onclick="triggerCelebration()">
-                <span class="feature-icon">🐱</span>
-                <div class="feature-title">Cat Paradise</div>
-                <div class="feature-desc">Cats spawn everywhere! Use /catparty for instant cats!</div>
-            </div>
-            <div class="feature-card" onclick="triggerCelebration()">
-                <span class="feature-icon">🌸</span>
-                <div class="feature-title">Flower Gardens</div>
-                <div class="feature-desc">Dense flower forests with every flower type!</div>
-            </div>
-            <div class="feature-card" onclick="triggerCelebration()">
-                <span class="feature-icon">🍀</span>
-                <div class="feature-title">Lucky Theme</div>
-                <div class="feature-desc">Lucky Cat statues & lucky red villages!</div>
-            </div>
-            <div class="feature-card" onclick="triggerCelebration()">
-                <span class="feature-icon">🌿</span>
-                <div class="feature-title">Bedrock Support</div>
-                <div class="feature-desc">Play from Mobile, Xbox, PS, & Switch!</div>
-            </div>
-            <div class="feature-card" onclick="triggerCelebration()">
-                <span class="feature-icon">🎉</span>
-                <div class="feature-title">Celebration Mode</div>
-                <div class="feature-desc">/celebration for HUGE parties with fireworks!</div>
-            </div>
-            <div class="feature-card" onclick="triggerCelebration()">
-                <span class="feature-icon">💎</span>
-                <div class="feature-title">Custom Economy</div>
-                <div class="feature-desc">JJ Tokens currency system with shop!</div>
-            </div>
+        
+        <div class="note">
+            <strong>📝 Note:</strong> Bedrock support (GeyserMC) requires additional plugin installation. 
+            Java Edition is fully functional and ready to play!
         </div>
-    </section>
-
-    <!-- Commands Section -->
-    <section class="commands">
-        <h2 class="commands-title">🎮 Fun Commands 🎮</h2>
-        <div class="commands-grid">
-            <div class="command-item" onclick="copyToClipboard('/jj')">
-                <div class="command-code">/jj</div>
-                <div class="command-desc">🎀 JJ Celebration!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/lucky')">
-                <div class="command-code">/lucky</div>
-                <div class="command-desc">🍀 Get lucky drops!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/catparty')">
-                <div class="command-code">/catparty</div>
-                <div class="command-desc">😺 Spawn 10 cats!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/flowerpower')">
-                <div class="command-code">/flowerpower</div>
-                <div class="command-desc">💐 Get 20 flowers!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/celebration')">
-                <div class="command-code">/celebration</div>
-                <div class="command-desc">🎉 BIG PARTY!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/rainbow')">
-                <div class="command-code">/rainbow</div>
-                <div class="command-desc">🌈 Rainbow armor!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/minecat')">
-                <div class="command-code">/minecat</div>
-                <div class="command-desc">⛏️ Cat spawn eggs!</div>
-            </div>
-            <div class="command-item" onclick="copyToClipboard('/luckycat')">
-                <div class="command-code">/luckycat</div>
-                <div class="command-desc">🐱 Lucky Cat statue!</div>
-            </div>
+        
+        <div class="features">
+            <h3>✨ Server Features</h3>
+            <ul>
+                <li>Cat Paradise - Cats spawn everywhere!</li>
+                <li>Flower Gardens - Beautiful flower forests</li>
+                <li>Lucky Theme - Lucky Cat statues & villages</li>
+                <li>Custom Economy - JJ Tokens system</li>
+                <li>Fun Commands - /jj, /catparty, /flowerpower, /celebration!</li>
+            </ul>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p class="footer-text">🎀 Made with 💜 for JJ | Powered by PurpurMC 1.21.3 🎀</p>
-        <div class="footer-links">
-            <a href="https://jj.bradarr.com" class="footer-link">🎀 Main Celebration Site</a>
-            <a href="#" class="footer-link" onclick="copyToClipboard('jjmc.bradarr.com'); return false;">📡 Connect Now</a>
-        </div>
-    </footer>
+        
+        <p style="color: #888; margin-top: 20px;">
+            🎮 Version: 1.21.3 Purpur | Made with 💜 for JJ
+        </p>
+    </div>
 
     <script>
-        // Floating Particles
-        const particles = ['🐱', '🌸', '🍀', '⭐', '💎', '🌈', '🎀', '🦋'];
-        const particlesContainer = document.getElementById('particles');
-
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.textContent = particles[Math.floor(Math.random() * particles.length)];
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
-            particlesContainer.appendChild(particle);
-
-            setTimeout(() => particle.remove(), 20000);
-        }
-
-        setInterval(createParticle, 2000);
-
-        // Copy Functions
-        function showNotification(message, isError = false) {
-            const notification = document.createElement('div');
-            notification.className = 'notification' + (isError ? ' error' : '');
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideIn 0.3s ease reverse';
-                setTimeout(() => notification.remove(), 300);
-            }, 2000);
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification('📋 Copied: ' + text);
-            }).catch(() => {
-                showNotification('❌ Failed to copy', true);
+        function copyIP() {
+            navigator.clipboard.writeText('jjmc.bradarr.com').then(() => {
+                alert('📋 Copied: jjmc.bradarr.com');
             });
         }
-
-        function copyIP() {
-            copyToClipboard('jjmc.bradarr.com');
-        }
-
-        // Celebration Effect
-        function triggerCelebration() {
-            for (let i = 0; i < 20; i++) {
-                setTimeout(createParticle, i * 100);
-            }
-            showNotification('🎉 Happy JJ! 🎉');
-        }
-
-        // Console Message
-        console.log('🎀 Welcome to JJ\'s Minecraft Server Landing Page!');
-        console.log('🐱 Made with love by Clawdbot 🦞');
-        console.log('💜 For the best person ever - JJ!');
     </script>
 </body>
 </html>
